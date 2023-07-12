@@ -1,0 +1,28 @@
+name: Discord to Twitter Tweet
+on:
+  actionsflow:
+    actions:
+      - "discord/message"
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up iSH Shell
+        uses: mjacobus/ish-shell@v1
+
+      - name: Install dependencies
+        run: |
+          apk update
+          apk add nodejs npm
+
+      - name: Run iSH Shell script
+        run: |
+          cd ${{ github.workspace }}
+          npm install actionsflow
+          npx actionsflow run
+        env:
+          ACTIONSFLOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
